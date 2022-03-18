@@ -1,5 +1,10 @@
 <?php
+<<<<<<< HEAD
 $user_name = 'Тарас Самойленко'; //Моё имя
+=======
+//Ф-ция для рандомного выбора числа, отображения шапки
+$is_auth = rand(0, 1);
+>>>>>>> 54e129a28f380af11e8186c06f6304ff13d512d4
 
 $is_auth = rand(0, 1); //Выбор числа 0 или 1 (для отображения шапки)
 
@@ -68,6 +73,103 @@ function sizePost($text, $length = 300)
 }
 ?>
 
+<<<<<<< HEAD
+=======
+<?php
+//Массив содержащий информацию карточек постов
+$arrayPopular = [
+	//Массив, содержащий данные для карточки - цитаты
+	[
+		'header' => 'Цитата',
+		'type' => 'post-quote',
+		'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
+		'user' => 'Лариса',
+		'avatar' => 'userpic-larisa-small.jpg'
+	],
+	//Массив, содержащий данные для карточки - текста
+	[
+		'header' => 'Игра престолов',
+		'type' => 'post-text',
+		'text' => 'Lorem ipsum dolor sit amet consectetur adipiscing, elit enim blandit etiam taciti, metus interdum magnis nulla lacinia. Malesuada feugiat tellus litora elementum habitant aptent quam viverra eget pellentesque hendrerit, fusce pulvinar lorem cursus mauris velit nascetur ad etiam sit, tortor facilisis eleifend nulla bibendum nec curae rutrum integer elit. Maximus sem justo sociosqu in maecenas sed nostra nec, tortor hendrerit class arcu luctus dapibus ac. Vel taciti fusce lacinia molestie integer semper morbi a, gravida libero arcu mus scelerisque vestibulum volutpat augue facilisi, placerat suscipit tempus et sed magna imperdiet. Vel consequat nibh varius justo mi posuere augue mus elementum penatibus volutpat, per enim taciti praesent suspendisse mattis dolor proin duis. Magna ultricies bibendum vestibulum condimentum fermentum etiam porta facilisi litora sapien dictumst lorem, elit amet dictum gravida augue tellus aptent ultrices himenaeos dui. Rhoncus dapibus placerat dictum vulputate consectetur congue neque sollicitudin, taciti quam commodo in finibus ad ornare, praesent fringilla enim curabitur porta',
+		'user' => 'Владик',
+		'avatar' => 'userpic.jpg'
+	],
+	//Массив, содержащий данные для карточки - фото
+	[
+		'header' => 'Наконец, обработал фотки!',
+		'type' => 'post-photo',
+		'content' => 'rock-medium.jpg',
+		'user' => '	Виктор',
+		'avatar' => 'userpic-mark.jpg'
+	],
+	//Массив, содержащий данные для карточки - фото
+	[
+		'header' => 'Моя мечта',
+		'type' => 'post-photo',
+		'content' => 'coast-medium.jpg',
+		'user' => 'Лариса',
+		'avatar' => 'userpic-larisa-small.jpg'
+	],
+	//Массив, содержащий данные для карточки - ссылки
+	[
+		'header' => 'Моя мечта',
+		'type' => 'post-link',
+		'content' => 'http://www.htmlacademy.ru/',
+		'user' => '	Владик',
+		'avatar' => 'userpic.jpg'
+	]
+];
+?>
+
+<?php
+//Функция, обрабатывающая текст (длину до 300 символов)
+function SizePost($text, $length = 300)
+{
+	$symbols = explode(" ", $text); //Разбиваем текст, с пробелами
+	$count = 0; //Переменная счётчик, для подсчёта символов
+	foreach ($symbols as $i => $value) { //Проходимся по массиву
+		$count += strlen($value) + 1; //суммируем символы элементов массива, учитывая пробелы
+		$arrayWords[] =  $symbols[$i]; //Массив, содержаший слова, которые будут выведены в карточке
+		if ($count > $length) { //Выход из цикла по условию превышения текста в 300 символов
+			break;
+		}
+	}
+	if ($count > $length) { //Условие, проверяющее была ли обрезка текста
+		$correctPost = implode(" ", $arrayWords) . "..."; //Склеиваем слова в строку
+		echo $correctPost . '<a class="post-text__more-link" href="#">Читать далее</a>'; //Вывод кнопки - Читать далее
+	}
+	else {
+		$correctPost = implode(" ", $arrayWords);
+		echo $correctPost;
+	}
+}
+?>
+
+<?php
+//Функция, обрабатывающая текст (длину до 300 символов)
+function SizePostNew($text, $length = 300)
+{
+	$lengthStr = strlen($text); //Проверяем длину строки
+	if ($lengthStr <= $length) { //Условие, если длина строки не превышает заданный лимит
+		echo $text; //Вывод строки
+	}
+	else { //Условие, если длина строки превышает заданный лимит
+		$symbols = explode(" ", $text); //Разбиваем текст, с пробелами
+		$count = 0; //Переменная счётчик, для подсчёта символов
+		foreach ($symbols as $i => $value) { //Проходимся по массиву
+			$count += strlen($value) + 1; //суммируем символы элементов массива, учитывая пробелы
+			$arrayWords[] =  $symbols[$i]; //Массив, содержаший слова, которые будут выведены в карточке
+			if ($count > $length) { //Выход из цикла по условию превышения текста в 300 символов
+				break;
+			}
+		}
+		$correctPost = implode(" ", $arrayWords) . "..."; //Склеиваем слова в строку
+		echo $correctPost . '<a class="post-text__more-link" href="#">Читать далее</a>'; //Вывод кнопки - Читать далее
+	}
+}
+?>
+
+>>>>>>> 54e129a28f380af11e8186c06f6304ff13d512d4
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -173,7 +275,7 @@ function sizePost($text, $length = 300)
 				</div>
 			</form>
 			<div class="header__nav-wrapper">
-				<!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
+				<!-- Вывод контента в зависимости от рандомного числа (если 1 - выводим) -->
 				<?php if ($is_auth == 1) : ?>
 					<nav class="header__nav">
 						<ul class="header__my-nav">
@@ -346,7 +448,10 @@ function sizePost($text, $length = 300)
 						</header>
 						<div class="post__main">
 
+<<<<<<< HEAD
 							<!-- Карточка поста цитаты -->
+=======
+>>>>>>> 54e129a28f380af11e8186c06f6304ff13d512d4
 							<?php if ($value['type'] == 'post-quote') : ?>
 								<blockquote>
 									<p>
@@ -384,7 +489,11 @@ function sizePost($text, $length = 300)
 							<!-- Карточка поста текста -->
 							<?php elseif ($value['type'] == 'post-text') : ?>
 								<p>
+<<<<<<< HEAD
 									<?= sizePost(htmlspecialchars($value['text'] ?? '')) ?>
+=======
+									<?php SizePostNew($value['text']); ?> <!-- Вызов функции, обрабатывающей текст -->
+>>>>>>> 54e129a28f380af11e8186c06f6304ff13d512d4
 								</p>
 
 							<!-- Карточка поста видео -->
