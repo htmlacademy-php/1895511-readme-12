@@ -1,4 +1,6 @@
 <?php
+require_once('helpers.php'); //Подключение сценария с ф-циями
+
 $user_name = 'Тарас Самойленко'; //Моё имя
 
 $is_auth = rand(0, 1); //Выбор числа 0 или 1 (для отображения шапки)
@@ -17,7 +19,7 @@ $arrayPopular = [
 	[
 		'header' => 'Игра престолов',
 		'type' => 'post-text',
-		'text' => '<p>Example</p> Lorem ipsum dolor sit amet consectetur adipiscing, elit enim blandit etiam taciti, metus interdum magnis nulla lacinia. Malesuada feugiat tellus litora elementum habitant aptent quam viverra eget pellentesque hendrerit, fusce pulvinar lorem cursus mauris velit nascetur ad etiam sit, tortor facilisis eleifend nulla bibendum nec curae rutrum integer elit. Maximus sem justo sociosqu in maecenas sed nostra nec, tortor hendrerit class arcu luctus dapibus ac. Vel taciti fusce lacinia molestie integer semper morbi a, gravida libero arcu mus scelerisque vestibulum volutpat augue facilisi, placerat suscipit tempus et sed magna imperdiet. Vel consequat nibh varius justo mi posuere augue mus elementum penatibus volutpat, per enim taciti praesent suspendisse mattis dolor proin duis. Magna ultricies bibendum vestibulum condimentum fermentum etiam porta facilisi litora sapien dictumst lorem, elit amet dictum gravida augue tellus aptent ultrices himenaeos dui. Rhoncus dapibus placerat dictum vulputate consectetur congue neque sollicitudin, taciti quam commodo in finibus ad ornare, praesent fringilla enim curabitur porta',
+		'text' => 'Lorem ipsum dolor sit amet consectetur adipiscing, elit enim blandit etiam taciti, metus interdum magnis nulla lacinia. Malesuada feugiat tellus litora elementum habitant aptent quam viverra eget pellentesque hendrerit, fusce pulvinar lorem cursus mauris velit nascetur ad etiam sit, tortor facilisis eleifend nulla bibendum nec curae rutrum integer elit. Maximus sem justo sociosqu in maecenas sed nostra nec, tortor hendrerit class arcu luctus dapibus ac. Vel taciti fusce lacinia molestie integer semper morbi a, gravida libero arcu mus scelerisque vestibulum volutpat augue facilisi, placerat suscipit tempus et sed magna imperdiet. Vel consequat nibh varius justo mi posuere augue mus elementum penatibus volutpat, per enim taciti praesent suspendisse mattis dolor proin duis. Magna ultricies bibendum vestibulum condimentum fermentum etiam porta facilisi litora sapien dictumst lorem, elit amet dictum gravida augue tellus aptent ultrices himenaeos dui. Rhoncus dapibus placerat dictum vulputate consectetur congue neque sollicitudin, taciti quam commodo in finibus ad ornare, praesent fringilla enim curabitur porta',
 		'user' => 'Владик',
 		'avatar' => 'userpic.jpg'
 	],
@@ -65,30 +67,6 @@ function sizePost($text, $length = 300)
 	}
 	$correctPost = implode(" ", $arrayWords) . "..."; //Склеиваем слова в строку
 	return $correctPost . '<a class="post-text__more-link" href="#">Читать далее</a>'; //Вывод кнопки - Читать далее
-}
-
-/**
- * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
- * @return string Итоговый HTML
- */
-function include_template($name, array $data = [])
-{
-    $name = 'templates/' . $name;
-    $result = '';
-
-    if (!is_readable($name)) {
-        return $result;
-    }
-
-    ob_start();
-    extract($data);
-    require $name;
-
-    $result = ob_get_clean();
-
-    return $result;
 }
 
 $page_content = include_template('main.php', ['arrayPopular' => $arrayPopular]); //Включение шаблона страницы со списком постов
