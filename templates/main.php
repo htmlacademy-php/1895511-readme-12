@@ -163,7 +163,16 @@
 								<b class="post__author-name">
 									<?= $value['user']; ?>
 								</b>
-								<time class="post__time" datetime="">дата</time>
+								<?php
+									$generatedDate = generate_random_date($value['index']); //Случайная дата создания поста
+								?>
+								<!-- Информация о дате публикации -->
+								<time class="post__time" datetime="<?= $generatedDate ?>" title="<?= date('d.m.Y H:i', strtotime($generatedDate)) ?>">
+									<p>
+										<!-- Вывод даты поста в относительном формате -->
+										<?= dateCreatePost('now', $generatedDate, $value['index']) ?>
+									</p>
+								</time> 
 							</div>
 						</a>
 					</div>
