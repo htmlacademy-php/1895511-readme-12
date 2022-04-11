@@ -1,8 +1,6 @@
 <?php
 require_once('helpers.php'); //Подключение сценария с ф-циями
 
-date_default_timezone_set('Europe/Kiev'); //Установка часового пояса по умолчанию
-
 $user_name = 'Тарас Самойленко'; //Моё имя
 
 $is_auth = rand(0, 1); //Выбор числа 0 или 1 (для отображения шапки)
@@ -77,36 +75,31 @@ function sizePost($text, $length = 300)
 }
 
 //Функция для вывода даты публикации поста в относительном формате
-function dateCreatePost($date1, $date2, $index)
+function dateCreatePost($datePublish)
 {
-	$dateNow = date_create($date1); // Создание экземпляра текущей даты
-	$datePost = date_create($date2); // Создание экземпляра даты размещения поста
+	$dateCurrentStamp = strtotime('now');
+	$datePublishStamp = strtotime($datePublish);
 
-	$diff = date_diff($dateNow, $datePost); // Вычисление экземпляра временного промежутка 
+	$interval = $dateCurrentStamp - $datePublishStamp;
 
-	//Выбор форматирования экземпляра временного промежутка для постов
-	switch ($date2) {
-	case $index == 0:
-		$minutes_count = date_interval_format($diff, "%i"); //Приводим интервал к нужному формату
-		return $minutes_count . get_noun_plural_form($minutes_count, ' минуту ', ' минуты ', ' минут ') . 'назад'; //Выводим дату в нужном формате
-		break;
-	case $index == 1:
-		$hours_count = date_interval_format($diff, "%h");
-		return $hours_count . get_noun_plural_form($hours_count, ' час ', ' часа ', ' часов ') . 'назад';
-		break;
-	case $index == 2:
-		$days_count = date_interval_format($diff, "%d");
-		return $days_count . get_noun_plural_form($days_count, ' день ', ' дня ', ' дней ') . 'назад';
-		break;
-	case $index == 3:
-		$month_count = date_interval_format($diff, "%m");
-		return $month_count . get_noun_plural_form($month_count, ' месяц ', ' месяца ', ' месяцев ') . 'назад';
-		break;
-	case $index == 4:
-		$year_count = date_interval_format($diff, "%y");
-		return $year_count . get_noun_plural_form($year_count, ' год ', ' года ', ' лет ') . 'назад';
-		break;
+	if ($datePublishStamp > strtotime('-60 minutes')) {
+		$intervalFormat = floor(date('i', $interval));
+		$date = $intervalFormat . get_noun_plural_form($intervalFormat, ' минуту ', ' минуты ', ' минут ') . 'назад';
+	} elseif ($datePublishStamp <= strtotime('-60 minutes') and $datePublishStamp > strtotime('-24 hours')) {
+		$intervalFormat = floor(date('h', $interval));
+		$date = $intervalFormat . get_noun_plural_form($intervalFormat, ' час ', ' часа ', ' часов ') . 'назад';
+	} elseif ($datePublishStamp <= strtotime('-24 hours') and $datePublishStamp > strtotime('-7 days')) {
+		$intervalFormat = floor(date('d', $interval));
+		$date = $intervalFormat . get_noun_plural_form($intervalFormat, ' день ', ' дня ', ' дней ') . 'назад';
+	} elseif ($datePublishStamp <= strtotime('-7 days') and $datePublishStamp > strtotime('-5 weeks')) {
+		$intervalFormat = floor(date('W', $interval));
+		$date = $intervalFormat . get_noun_plural_form($intervalFormat, ' неделю ', ' недели ', ' недель ') . 'назад';
+	} elseif ($datePublishStamp <= strtotime('-5 weeks')) {
+		$intervalFormat = floor(date('m', $interval));
+		$date = $intervalFormat . get_noun_plural_form($intervalFormat, ' месяц ', ' месяца ', ' месяцев ') . 'назад';
 	}
+
+	return $date;
 }
 
 $page_content = include_template('main.php', ['arrayPopular' => $arrayPopular]); //Включение шаблона страницы со списком постов

@@ -170,7 +170,7 @@
 								<time class="post__time" datetime="<?= $generatedDate ?>" title="<?= date('d.m.Y H:i', strtotime($generatedDate)) ?>">
 									<p>
 										<!-- Вывод даты поста в относительном формате -->
-										<?= dateCreatePost('now', $generatedDate, $value['index']) ?>
+										<?= dateCreatePost($generatedDate); ?>
 									</p>
 								</time> 
 							</div>
