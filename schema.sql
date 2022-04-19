@@ -22,9 +22,11 @@ CREATE TABLE posts (
   image VARCHAR(255) NOT NULL,
   video VARCHAR(255) NOT NULL,
   reference VARCHAR(255) NOT NULL,
-  view_post INT,
+  view_number INT,
   user_id INT,
-  type_content_id INT
+  type_content_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (type_content_id) REFERENCES types_content (id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -32,7 +34,9 @@ CREATE TABLE comments (
   dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
   content TEXT NOT NULL,
   user_id INT,
-  post_id INT
+  post_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE messages (
@@ -40,33 +44,41 @@ CREATE TABLE messages (
   dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
   content TEXT NOT NULL,
   user_id INT,
-  autor_id1 INT
+  autor_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (autor_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE types_content (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name_type VARCHAR(255) NOT NULL,
+  name_entity VARCHAR(255) NOT NULL,
   name_class_icon VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE likes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
-  post_id INT
+  post_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE subscriptions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
-  autor_id1 INT
+  autor_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (autor_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE hashtags (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name_hashtag VARCHAR(255) NOT NULL UNIQUE
+  name_entity VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE posts_hashtags (
   post_id INT,
-  hashtag_id INT
+  hashtag_id INT,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+  FOREIGN KEY (hashtag_id) REFERENCES hashtags (id) ON DELETE CASCADE
 );
