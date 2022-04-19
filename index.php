@@ -60,7 +60,7 @@ $arrayPopular = [
 function sizePost($text, $length = 300)
 {
 	$textLength = strlen($text); //Кол-во символов в тексте поста
-	if ($textLength <= $length) { //Выводим тескт, если кол-во символов не превышает 300 
+	if ($textLength <= $length) { //Выводим тескт, если кол-во символов не превышает 300
 		return $text;
 	}
 	$symbols = explode(" ", $text); //Разбиваем текст, с пробелами
