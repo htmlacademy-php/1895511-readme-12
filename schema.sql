@@ -8,9 +8,15 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
   email VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   login VARCHAR(255) NOT NULL UNIQUE,
   avatar_path VARCHAR(255)
+);
+
+CREATE TABLE types_content (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  name_class_icon VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE posts (
@@ -21,8 +27,8 @@ CREATE TABLE posts (
   quote_autor VARCHAR(255) NOT NULL,
   image VARCHAR(255) NOT NULL,
   video VARCHAR(255) NOT NULL,
-  reference VARCHAR(255) NOT NULL,
-  view_number INT,
+  `reference` VARCHAR(255) NOT NULL,
+  `view` INT,
   user_id INT,
   type_content_id INT,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
@@ -49,12 +55,6 @@ CREATE TABLE messages (
   FOREIGN KEY (autor_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE types_content (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name_entity VARCHAR(255) NOT NULL,
-  name_class_icon VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE likes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -73,7 +73,7 @@ CREATE TABLE subscriptions (
 
 CREATE TABLE hashtags (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name_entity VARCHAR(255) NOT NULL UNIQUE
+  `name` VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE posts_hashtags (
