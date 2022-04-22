@@ -1,0 +1,84 @@
+CREATE DATABASE readme
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+
+USE readme;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  login VARCHAR(255) NOT NULL UNIQUE,
+  avatar_path VARCHAR(255)
+);
+
+CREATE TABLE types_content (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  name_class_icon VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  quote_autor VARCHAR(255) NOT NULL,
+  image VARCHAR(255) NOT NULL,
+  video VARCHAR(255) NOT NULL,
+  `reference` VARCHAR(255) NOT NULL,
+  `view` INT,
+  user_id INT,
+  type_content_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (type_content_id) REFERENCES types_content (id) ON DELETE CASCADE
+);
+
+CREATE TABLE comments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
+  content TEXT NOT NULL,
+  user_id INT,
+  post_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add DATETIME DEFAULT CURRENT_TIMESTAMP,
+  content TEXT NOT NULL,
+  user_id INT,
+  autor_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (autor_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE likes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  post_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE subscriptions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  autor_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (autor_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE hashtags (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE posts_hashtags (
+  post_id INT,
+  hashtag_id INT,
+  FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+  FOREIGN KEY (hashtag_id) REFERENCES hashtags (id) ON DELETE CASCADE
+);
