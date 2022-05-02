@@ -32,7 +32,7 @@ $arrayPopular = [
 		'header' => 'Наконец, обработал фотки!',
 		'type' => 'post-photo',
 		'content' => 'rock-medium.jpg',
-		'user' => '	Виктор',
+		'user' => 'Виктор',
 		'avatar' => 'userpic-mark.jpg',
 		'index' => 2
 	],
@@ -50,7 +50,7 @@ $arrayPopular = [
 		'header' => 'Моя мечта',
 		'type' => 'post-link',
 		'content' => 'http://www.htmlacademy.ru/',
-		'user' => '	Владик',
+		'user' => 'Владик',
 		'avatar' => 'userpic.jpg',
 		'index' => 4
 	]

@@ -1,3 +1,36 @@
+<?php
+//Соединение с БД "readme"
+$link = mysqli_connect("127.0.0.1", "root", "", "readme");
+//Проверка соединения
+if ($link == false) {
+    print("Ошибка подключения: " . mysqli_connect_error()); //В случае неудачного подключения выводить ошибку
+}
+else {
+    print("Соединение установлено");
+    // выполнение запросов
+    mysqli_set_charset($link, "utf8"); //Установка кодировки
+}
+//Формирование запроса на чтение из таблицы типов контента
+$sqlToTypes = "SELECT name_class_icon FROM types_content";
+$resultTypes = mysqli_query($link, $sqlToTypes);
+//Обработка ошибки запроса
+if (!$resultTypes) {
+    $error = mysqli_error($link);
+    print("Ошибка MySQL: " . $error);
+}
+$rowsTypes = mysqli_fetch_all($resultTypes, MYSQLI_ASSOC); //Преобразование объекта результата в массив
+
+//Формирование запроса для получения списка постов, объединённых с пользователями и отсортированный по популярности
+$sqlToPosts = "SELECT title, content, login, image, view, quote_autor FROM posts p JOIN users u ON p.user_id = u.id ORDER BY view ASC";
+$resultPosts = mysqli_query($link, $sqlToPosts);
+//Обработка ошибки запроса
+if (!$resultPosts) {
+    $error = mysqli_error($link);
+    print("Ошибка MySQL: " . $error);
+}
+$rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC); //Преобразование объекта результата в массив
+?>
+
 <div class="container">
 	<h1 class="page__title page__title--popular">Популярное</h1>
 </div>
@@ -84,121 +117,123 @@
 		</div>
 	</div>
 
-	<div class="popular__posts">
-		<?php foreach ($arrayPopular as $key => $value) : ?>
-			<article class="popular__post post <?= $value['type']; ?>">
-				<header class="post__header">
-					<h2>
-						<?= $value['header']; ?>
-					</h2>
-				</header>
-				<div class="post__main">
+    <div class="popular__posts">
+        <?php foreach ($rowsTypes as $row) : ?>
+            <article class="popular__post post <?= $row['name_class_icon']; ?>">
+                <?php foreach ($rowsPosts as $row) : ?>
+                    <header class="post__header">
+                        <h2>
+                            <?= $row['title']; ?>
+                        </h2>
+                    </header>
+                    <div class="post__main">
 
-					<!-- Карточка поста цитаты -->
-					<?php if ($value['type'] == 'post-quote') : ?>
-						<blockquote>
-							<p>
-								<?= htmlspecialchars($value['content']) ?>
-							</p>
-							<cite><?= $value['user']; ?></cite>
-						</blockquote>
+                        <!-- Карточка поста цитаты -->
+                        <?php if ($row['name_class_icon'] == 'post-quote') : ?>
+                            <blockquote>
+                                <p>
+                                    <?= htmlspecialchars($row['content']) ?>
+                                </p>
+                                <cite><?= $row['quote_autor']; ?></cite>
+                            </blockquote>
 
-						<!-- Карточка поста ссылки -->
-					<?php elseif ($value['type'] == 'post-link') : ?>
-						<div class="post-link__wrapper">
-							<a class="post-link__external" href="http://" title="Перейти по ссылке">
-								<div class="post-link__info-wrapper">
-									<div class="post-link__icon-wrapper">
-										<img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
-									</div>
-									<div class="post-link__info">
-										<h3>
-											<?= $value['header']; ?>
-										</h3>
-									</div>
-								</div>
-								<span>
-									<?= htmlspecialchars($value['content']) ?>
-								</span>
-							</a>
-						</div>
+                            <!-- Карточка поста ссылки -->
+                        <?php elseif ($row['name_class_icon'] == 'post-link') : ?>
+                            <div class="post-link__wrapper">
+                                <a class="post-link__external" href="http://" title="Перейти по ссылке">
+                                    <div class="post-link__info-wrapper">
+                                        <div class="post-link__icon-wrapper">
+                                            <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
+                                        </div>
+                                        <div class="post-link__info">
+                                            <h3>
+                                                <?= $row['title']; ?>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <span>
+                                        <?= htmlspecialchars($row['content']) ?>
+                                    </span>
+                                </a>
+                            </div>
 
-						<!-- Карточка поста фото -->
-					<?php elseif ($value['type'] == 'post-photo') : ?>
-						<div class="post-photo__image-wrapper">
-							<img src="img/<?= htmlspecialchars($value['content']) ?>" alt="Фото от пользователя" width="360" height="240">
-						</div>
+                            <!-- Карточка поста фото -->
+                        <?php elseif ($row['name_class_icon'] == 'post-photo') : ?>
+                            <div class="post-photo__image-wrapper">
+                                <img src="img/<?= htmlspecialchars($row['content']) ?>" alt="Фото от пользователя" width="360" height="240">
+                            </div>
 
-						<!-- Карточка поста текста -->
-					<?php elseif ($value['type'] == 'post-text') : ?>
-						<p>
-							<!-- Вызов функции, обрабатывающей текст -->
-							<?= sizePost(htmlspecialchars($value['text'] ?? '')) ?>
-						</p>
+                            <!-- Карточка поста текста -->
+                        <?php elseif ($row['name_class_icon'] == 'post-text') : ?>
+                            <p>
+                                <!-- Вызов функции, обрабатывающей текст -->
+                                <?= sizePost(htmlspecialchars($row['content'] ?? '')) ?>
+                            </p>
 
-						<!-- Карточка поста видео -->
-					<?php else : ?>
-						<div class="post-video__block">
-							<div class="post-video__preview">
-								<?= embed_youtube_cover('https://www.youtube.com/watch?v=lbtozW0anQ4'); ?>
-								<img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
-							</div>
-							<a href="post-details.html" class="post-video__play-big button">
-								<svg class="post-video__play-big-icon" width="14" height="14">
-									<use xlink:href="#icon-video-play-big"></use>
-								</svg>
-								<span class="visually-hidden">Запустить проигрыватель</span>
-							</a>
-						</div>
+                            <!-- Карточка поста видео -->
+                        <?php else : ?>
+                            <div class="post-video__block">
+                                <div class="post-video__preview">
+                                    <?= embed_youtube_cover('https://www.youtube.com/watch?v=lbtozW0anQ4'); ?>
+                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
+                                </div>
+                                <a href="post-details.html" class="post-video__play-big button">
+                                    <svg class="post-video__play-big-icon" width="14" height="14">
+                                        <use xlink:href="#icon-video-play-big"></use>
+                                    </svg>
+                                    <span class="visually-hidden">Запустить проигрыватель</span>
+                                </a>
+                            </div>
 
-					<?php endif; ?>
-				</div>
-				<footer class="post__footer">
-					<div class="post__author">
-						<a class="post__author-link" href="#" title="Автор">
-							<div class="post__avatar-wrapper">
-								<img class="post__author-avatar" src="img/<?= $value['avatar']; ?>" alt="Аватар пользователя">
-							</div>
-							<div class="post__info">
-								<b class="post__author-name">
-									<?= $value['user']; ?>
-								</b>
-								<?php
-									$generatedDate = generate_random_date($value['index']); //Случайная дата создания поста
-								?>
-								<!-- Информация о дате публикации -->
-								<time class="post__time" datetime="<?= $generatedDate ?>" title="<?= date('d.m.Y H:i', strtotime($generatedDate)) ?>">
-									<p>
-										<!-- Вывод даты поста в относительном формате -->
-										<?= dateCreatePost($generatedDate); ?>
-									</p>
-								</time> 
-							</div>
-						</a>
-					</div>
-					<div class="post__indicators">
-						<div class="post__buttons">
-							<a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-								<svg class="post__indicator-icon" width="20" height="17">
-									<use xlink:href="#icon-heart"></use>
-								</svg>
-								<svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-									<use xlink:href="#icon-heart-active"></use>
-								</svg>
-								<span>0</span>
-								<span class="visually-hidden">количество лайков</span>
-							</a>
-							<a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
-								<svg class="post__indicator-icon" width="19" height="17">
-									<use xlink:href="#icon-comment"></use>
-								</svg>
-								<span>0</span>
-								<span class="visually-hidden">количество комментариев</span>
-							</a>
-						</div>
-					</div>
-				</footer>
-			</article>
-		<?php endforeach; ?>
-	</div>
+                        <?php endif; ?>
+                    </div>
+                    <footer class="post__footer">
+                        <div class="post__author">
+                            <a class="post__author-link" href="#" title="Автор">
+                                <div class="post__avatar-wrapper">
+                                    <img class="post__author-avatar" src="img/<?= $row['image']; ?>" alt="Аватар пользователя">
+                                </div>
+                                <div class="post__info">
+                                    <b class="post__author-name">
+                                        <?= $row['login']; ?>
+                                    </b>
+                                    <?php
+                                    $generatedDate = generate_random_date($value['index']); //Случайная дата создания поста
+                                    ?>
+                                    <!-- Информация о дате публикации -->
+                                    <time class="post__time" datetime="<?= $generatedDate ?>" title="<?= date('d.m.Y H:i', strtotime($generatedDate)) ?>">
+                                        <p>
+                                            <!-- Вывод даты поста в относительном формате -->
+                                            <?= dateCreatePost($generatedDate); ?>
+                                        </p>
+                                    </time>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="post__indicators">
+                            <div class="post__buttons">
+                                <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                                    <svg class="post__indicator-icon" width="20" height="17">
+                                        <use xlink:href="#icon-heart"></use>
+                                    </svg>
+                                    <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                                        <use xlink:href="#icon-heart-active"></use>
+                                    </svg>
+                                    <span>0</span>
+                                    <span class="visually-hidden">количество лайков</span>
+                                </a>
+                                <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
+                                    <svg class="post__indicator-icon" width="19" height="17">
+                                        <use xlink:href="#icon-comment"></use>
+                                    </svg>
+                                    <span>0</span>
+                                    <span class="visually-hidden">количество комментариев</span>
+                                </a>
+                            </div>
+                        </div>
+                    </footer>
+                <?php endforeach; ?>
+            </article>
+        <?php endforeach; ?>
+    </div>
 </div>
