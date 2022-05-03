@@ -7,54 +7,28 @@ $user_name = 'Тарас Самойленко'; //Моё имя
 
 $is_auth = rand(0, 1); //Выбор числа 0 или 1 (для отображения шапки)
 
-//Массив содержащий информацию карточек постов
-$arrayPopular = [
-	//Массив, содержащий данные для карточки - цитаты
-	[
-		'header' => 'Цитата',
-		'type' => 'post-quote',
-		'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-		'user' => 'Лариса',
-		'avatar' => 'userpic-larisa-small.jpg',
-		'index' => 0
-	],
-	//Массив, содержащий данные для карточки - текста
-	[
-		'header' => 'Игра престолов',
-		'type' => 'post-text',
-		'text' => 'Lorem ipsum dolor sit amet consectetur adipiscing, elit enim blandit etiam taciti, metus interdum magnis nulla lacinia. Malesuada feugiat tellus litora elementum habitant aptent quam viverra eget pellentesque hendrerit, fusce pulvinar lorem cursus mauris velit nascetur ad etiam sit, tortor facilisis eleifend nulla bibendum nec curae rutrum integer elit. Maximus sem justo sociosqu in maecenas sed nostra nec, tortor hendrerit class arcu luctus dapibus ac. Vel taciti fusce lacinia molestie integer semper morbi a, gravida libero arcu mus scelerisque vestibulum volutpat augue facilisi, placerat suscipit tempus et sed magna imperdiet. Vel consequat nibh varius justo mi posuere augue mus elementum penatibus volutpat, per enim taciti praesent suspendisse mattis dolor proin duis. Magna ultricies bibendum vestibulum condimentum fermentum etiam porta facilisi litora sapien dictumst lorem, elit amet dictum gravida augue tellus aptent ultrices himenaeos dui. Rhoncus dapibus placerat dictum vulputate consectetur congue neque sollicitudin, taciti quam commodo in finibus ad ornare, praesent fringilla enim curabitur porta',
-		'user' => 'Владик',
-		'avatar' => 'userpic.jpg',
-		'index' => 1
-	],
-	//Массив, содержащий данные для карточки - фото
-	[
-		'header' => 'Наконец, обработал фотки!',
-		'type' => 'post-photo',
-		'content' => 'rock-medium.jpg',
-		'user' => 'Виктор',
-		'avatar' => 'userpic-mark.jpg',
-		'index' => 2
-	],
-	//Массив, содержащий данные для карточки - фото
-	[
-		'header' => 'Моя мечта',
-		'type' => 'post-photo',
-		'content' => 'coast-medium.jpg',
-		'user' => 'Лариса',
-		'avatar' => 'userpic-larisa-small.jpg',
-		'index' => 3
-	],
-	//Массив, содержащий данные для карточки - ссылки
-	[
-		'header' => 'Моя мечта',
-		'type' => 'post-link',
-		'content' => 'http://www.htmlacademy.ru/',
-		'user' => 'Владик',
-		'avatar' => 'userpic.jpg',
-		'index' => 4
-	]
-];
+//Соединение с БД "readme"
+$link = mysqli_connect("127.0.0.1", "root", "", "readme");
+//Проверка соединения
+if ($link == false) {
+    print("Ошибка подключения: " . mysqli_connect_error()); //В случае неудачного подключения выводить ошибку
+    exit;//Прекратить выполнение скрипта
+}
+
+//Выполнение запросов БД
+mysqli_set_charset($link, "utf8"); //Установка кодировки
+//Формирование запроса на чтение из таблицы постов
+$sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+JOIN types_content t ON p.type_content_id = t.id
+JOIN users u ON p.user_id = u.id
+ORDER BY view DESC";
+$resultPosts = mysqli_query($link, $sqlToPosts);
+//Обработка ошибки запроса
+if (!$resultPosts) {
+    $error = mysqli_error($link);
+    print("Ошибка MySQL: " . $error);
+}
+$rowsPosts = mysqli_fetch_all($resultPosts, MYSQLI_ASSOC); //Преобразование объекта результата в массив
 
 //Функция, обрабатывающая текст (длину до 300 символов)
 function sizePost($text, $length = 300)
@@ -105,7 +79,7 @@ function dateCreatePost($datePublish)
 	return $date; //вывод даты в относительном формате
 }
 
-$page_content = include_template('main.php', ['arrayPopular' => $arrayPopular]); //Включение шаблона страницы со списком постов
+$page_content = include_template('main.php', ['rowsPosts' => $rowsPosts]); //Включение шаблона страницы со списком постов
 
 //Включение лейаута с основым содержимым страницы, title для страницы
 $layout_content = include_template('layout.php', ['content' => $page_content, 'title' => 'readme: популярное', 'is_auth' => $is_auth]);
