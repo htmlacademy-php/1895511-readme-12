@@ -6,11 +6,11 @@
                     <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
                 </div>
                 <div class="post-link__info">
-                    <h3><?= $row['title']; ?></h3>
+                    <h3><?=$row_posts['title'];?></h3>
                 </div>
             </div>
             <span>
-                <?= htmlspecialchars($row['reference']); ?>
+                <?=htmlspecialchars($row_posts['reference']);?>
             </span>
         </a>
     </div>

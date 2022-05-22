@@ -32,27 +32,27 @@ else {
 mysqli_set_charset($link, "utf8"); //Установка кодировки
 //Формирование запроса на чтение из таблицы постов
 if ($types_content_id == 1) {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id JOIN users u ON p.user_id = u.id WHERE p.type_content_id = '1'";
 }
 elseif ($types_content_id == 2) {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id JOIN users u ON p.user_id = u.id WHERE p.type_content_id = '2'";
 }
 elseif ($types_content_id == 3) {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id JOIN users u ON p.user_id = u.id WHERE p.type_content_id = '3'";
 }
 elseif ($types_content_id == 4) {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id JOIN users u ON p.user_id = u.id WHERE p.type_content_id = '4'";
 }
 elseif ($types_content_id == 5) {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id JOIN users u ON p.user_id = u.id WHERE p.type_content_id = '5'";
 }
 else {
-    $sqlToPosts = "SELECT p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
+    $sqlToPosts = "SELECT p.id, p.dt_add, title, content, quote_autor, image, reference, name_class_icon, login, avatar_path, view FROM posts p
     JOIN types_content t ON p.type_content_id = t.id
     JOIN users u ON p.user_id = u.id
     ORDER BY view DESC";

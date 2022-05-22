@@ -1,6 +1,6 @@
 <header class="post__header">
     <h2>
-        <a href="http://1895511-readme-12/post.php/?types_content_id=4">
+        <a href="http://1895511-readme-12/post.php/?id=<?= $row['id']; ?>">
             <?= $row['title']; ?>
         </a>
     </h2>
